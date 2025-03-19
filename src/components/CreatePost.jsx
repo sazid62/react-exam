@@ -13,13 +13,7 @@ function CreatePost() {
   const [isImageURLInputVisible, setIsImageURLInputVisible] = useState(false);
   const [isVideoURLInputVisible, setIsVideoURLInputVisible] = useState(false);
 
-  useEffect(() => {
-    const intervalId = setInterval(() => {
-      setData(JSON.parse(localStorage.getItem("allUser") || "[]"));
-    }, 1000);
 
-    return () => clearInterval(intervalId);
-  }, []);
 
   const handleTextChange = (e) => {
     setText(e.target.value);
