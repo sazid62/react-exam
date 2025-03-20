@@ -1,20 +1,42 @@
 import React, { useState, useEffect } from "react";
 import MyFeedCard from "./MyFeedCard";
 function CreatePost() {
+  // console.log(clickedDelete, "ssssssssssssssssssssssssssss");
   const [data, setData] = useState(
     JSON.parse(localStorage.getItem("allUser") || "[]")
   );
+  const [allPost, setAllPost] = useState([]);
 
-  let currentUser = JSON.parse(localStorage.getItem("currentUser") || "{}");
-
+  const [currentUser, setCurrentUser] = useState(() => {
+    const savedUser = localStorage.getItem("currentUser");
+    return savedUser ? JSON.parse(savedUser) : { likedPost: [] };
+  });
   const [text, setText] = useState("");
   const [imageUrl, setImageUrl] = useState("");
   const [videoUrl, setVideoUrl] = useState("");
   const [isImageURLInputVisible, setIsImageURLInputVisible] = useState(false);
   const [isVideoURLInputVisible, setIsVideoURLInputVisible] = useState(false);
 
+  useEffect(() => {
+    localStorage.setItem("allUser", JSON.stringify(data));
+    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+  }, [currentUser, data, setData, setCurrentUser]);
 
-
+  useEffect(() => {
+    let postAll = [];
+    data.forEach((eachPerson) => {
+      eachPerson.posts.forEach((post) => {
+        postAll.push({
+          ...post,
+          username: eachPerson.username,
+          profile: eachPerson.profile,
+        });
+      });
+    });
+    postAll.sort((a, b) => b.id - a.id);
+    setAllPost(postAll);
+    // console.log(postAll, "sadasdasds");
+  }, [data]);
   const handleTextChange = (e) => {
     setText(e.target.value);
   };
@@ -47,23 +69,44 @@ function CreatePost() {
       posts: [newPost, ...currentUser.posts],
     };
 
-    localStorage.setItem("currentUser", JSON.stringify(updatedUser));
-
     const newData = data.map((eachPerson) =>
       eachPerson.username === currentUser.username ? updatedUser : eachPerson
     );
-
     setData(newData);
-
+    setCurrentUser(updatedUser);
     localStorage.setItem("allUser", JSON.stringify(newData));
-
+    let postAll = [];
+    newData.forEach((eachPerson) => {
+      eachPerson.posts.forEach((post) => {
+        postAll.push({
+          ...post,
+          username: eachPerson.username,
+          profile: eachPerson.profile,
+        });
+      });
+    });
+    postAll.sort((a, b) => a.id - b.id);
+    setAllPost([
+      {
+        id: Date.now(),
+        username: currentUser.username,
+        profile: currentUser.profile,
+        text: text,
+        image: imageUrl,
+      },
+      ...allPost,
+    ]);
+    // console.log(postAll, "sadasdasds");
     setText("");
     setImageUrl("");
     setVideoUrl("");
   };
   return (
     <>
-      <div className="_feed_inner_text_area _b_radious6 _padd_b24 _padd_t24 _padd_r24 _padd_l24 _mar_b16">
+      <div
+        // key={Date.now()}
+        className="_feed_inner_text_area _b_radious6 _padd_b24 _padd_t24 _padd_r24 _padd_l24 _mar_b16"
+      >
         <div className="_feed_inner_text_area_box">
           <div className="_feed_inner_text_area_box_image">
             <img
@@ -176,22 +219,25 @@ function CreatePost() {
         </form>
       </div>
 
-      {data.map((eachPerson) => {
-        return eachPerson.posts.map((perPosts) => (
+      {currentUser &&
+        allPost.map((perPosts) => (
           <MyFeedCard
-            key={perPosts.id}
+            key={`${perPosts.id}-${perPosts.username}`}
             card={{
               cardId: perPosts.id,
-              username: eachPerson.username,
-              userprofile: eachPerson.profile,
+              username: perPosts.username,
+              userprofile: perPosts.profile,
               minutes: Math.floor((Date.now() - perPosts.id) / 1000 / 60),
               seconds: Math.floor(((Date.now() - perPosts.id) / 1000) % 60),
               text: perPosts.text,
               image: perPosts.image,
             }}
+            setData={setData}
+            data={data}
+            currentUser={currentUser}
+            setCurrentUser={setCurrentUser}
           />
-        ));
-      })}
+        ))}
     </>
   );
 }

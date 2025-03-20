@@ -363,9 +363,8 @@ function LeftSidebar() {
                 <hr class="_underline" />
                 <div class="_left_inner_event_bottom">
                   <p class="_left_iner_event_bottom">17 People Going</p>
-                  <a href="#0" class="_left_iner_event_bottom_link">
-                    Going
-                  </a>
+                  {/* <!-- Replace the inner <a> tag with a <span> or <button> --> */}
+                  <span class="_left_iner_event_bottom_link">Going</span>
                 </div>
               </div>
             </a>

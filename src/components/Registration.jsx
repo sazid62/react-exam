@@ -6,6 +6,8 @@ export default function Registration() {
     username: "",
     password: "",
     repeatPassword: "",
+    profile:
+      "https://imgs.search.brave.com/PixY8_zgl8cU1m2y47bf0V-2jOluOmEHOR4564ScsUA/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly90NC5m/dGNkbi5uZXQvanBn/LzAwLzY0LzY3LzI3/LzM2MF9GXzY0Njcy/NzM2X1U1a3BkR3M5/a2VVbGw4Q1JRM3Az/WWFFdjJNNnFrVlk1/LmpwZw",
   });
 
   const bugDiv = useRef();
@@ -150,6 +152,26 @@ export default function Registration() {
                         />
                       </div>
                     </div>
+
+                    <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
+                      <div class="_social_registration_form_input _mar_b14">
+                        <label
+                          class="_social_registration_label _mar_b8"
+                          htmlFor="username"
+                        >
+                          Profile Url
+                        </label>
+                        <input
+                          type="text"
+                          class="form-control _social_registration_input"
+                          id="username"
+                          name="username"
+                          value={formData.profile}
+                          onChange={handleInputChange}
+                          required={true}
+                        />
+                      </div>
+                    </div>
                     <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12">
                       <div class="_social_registration_form_input _mar_b14">
                         <label
@@ -165,7 +187,7 @@ export default function Registration() {
                           name="password"
                           value={formData.password}
                           onChange={handleInputChange}
-                          required={true}
+                          // required={true}
                         />
                       </div>
                     </div>

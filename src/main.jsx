@@ -14,6 +14,7 @@ import "../assets/css/main.css";
 import "../assets/css/responsive.css";
 
 // Components
+
 import Login from "./components/Login";
 import App from "./App.jsx";
 import Registration from "./components/Registration";
@@ -23,7 +24,10 @@ const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<Login />} />
-      <Route path="/success" element={<App />} />
+      <Route
+        path={localStorage.getItem("currentUser") ? "/success" : "/"}
+        element={<App />}
+      />
       <Route path="/reg" element={<Registration />} />
     </>
   )
